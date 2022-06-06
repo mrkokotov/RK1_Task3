@@ -21,17 +21,13 @@ char* task3(FILE* in)
 {
     char c = 0;
     int length = 0;
-    int count_hex=0;
 
-    char chars[64];
+    fseek(in, 0, SEEK_END);
+    long fsize = ftell(in);
+    fseek(in, 0, SEEK_SET);
 
-    for(int i = 0; i < 63; ++i)
-    {
-        chars[i] = 0;
-    }
-
-    static char result[16];
-    static char result1[16];
+    char* chars = (char*)malloc(sizeof(char) * fsize);
+    static char* result = (char*)malloc(sizeof(char) * (fsize / 4 + 5));
 
     while(fscanf(in, "%c", &c) != EOF)
     {
@@ -49,14 +45,13 @@ char* task3(FILE* in)
         }
 
         result[i / 4] = value[temp];
-        count_hex++;
-    }
-    for(int k=0;k<count_hex;k++)
-    {
-        result1[k]=result[count_hex-1-k];
     }
 
-    return result1;
+    result[fsize / 4 + 1] = '\0';
+
+    free(chars);
+
+    return result;
 }
 
 
@@ -75,6 +70,8 @@ int main()
     nums[16] = '\0';
 
     std::cout << nums;
+
+    free(nums);
 
     fclose(in);
 
